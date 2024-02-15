@@ -1,9 +1,8 @@
-// Simulating PHP's $_SERVER['PHP_SELF']
 const PHP_SELF = window.location.pathname;
 
-if (/config\.js\/?$/i.test(PHP_SELF)) {
+if (/config\.php\/?$/i.test(PHP_SELF)) {
   document.body.textContent = "That's all you got, try even more harder :)";
-  throw new Error("PHP_SELF ends with '/config.js'");
+  throw new Error("PHP_SELF ends with '/config.php'");
 }
 
 if (new URLSearchParams(window.location.search).has('source')) {
@@ -11,7 +10,7 @@ if (new URLSearchParams(window.location.search).has('source')) {
   window.location.href = PHP_SELF.split('/').pop();
 }
 
-const secret = Array.from(window.crypto.getRandomValues(new Uint8Array(64)), val => val.toString(16)).join('');
+let secret = Array.from(window.crypto.getRandomValues(new Uint8Array(64)), val => val.toString(16)).join('');
 
 const form = document.querySelector('form');
 if (form) {
