@@ -1,40 +1,22 @@
-const PHP_SELF = window.location.pathname;
+<?php
+include 'config.php'; // FLAG is defined in config.php
 
-if (/config\.js\/?$/i.test(PHP_SELF)) {
-  document.body.textContent = "That's all you got, try even more harder :)";
-  throw new Error("PHP_SELF ends with '/config.js'");
+if (preg_match('/config\.php\/*$/i', $_SERVER['PHP_SELF'])) {
+  exit("Thats's all you got, try even more harder :)");
 }
 
-if (new URLSearchParams(window.location.search).has('source')) {
-  // Redirect to the source file (config.js)
-  window.location.href = 'config.js';
+if (isset($_GET['source'])) {
+  highlight_file(basename($_SERVER['PHP_SELF']));
+  exit();
 }
 
-let secret = Array.from(window.crypto.getRandomValues(new Uint8Array(64)), val => val.toString(16)).join('');
-
-const form = document.querySelector('form');
-if (form) {
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const formData = new FormData(form);
-    if (formData.has('guess')) {
-      const guess = formData.get('guess');
-      let message;
-      if (secret === guess) {
-        message = 'The flag is: ' + FLAG;
-      } else {
-        message = 'NICE TRY!!!';
-      }
-      document.body.textContent = message;
-    }
-  });
+$secret = bin2hex(random_bytes(64));
+if (isset($_POST['guess'])) {
+  $guess = (string) $_POST['guess'];
+  if (hash_equals($secret, $guess)) {
+    $message = 'The flag is: ' . FLAG;
+  } else {
+    $message = 'NICE TRY!!!';
+  }
 }
-
-const sourceLink = document.getElementById('sourceLink');
-if (sourceLink) {
-  sourceLink.addEventListener('click', (event) => {
-    event.preventDefault();
-    // Redirect to the source file (config.js)
-    window.location.href = 'config.js';
-  });
-}
+?>
