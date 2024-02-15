@@ -1,8 +1,8 @@
 const PHP_SELF = window.location.pathname;
 
-if (/config\.php\/?$/i.test(PHP_SELF)) {
+if (/config\.js\/?$/i.test(PHP_SELF)) {
   document.body.textContent = "That's all you got, try even more harder :)";
-  throw new Error("PHP_SELF ends with '/config.php'");
+  throw new Error("PHP_SELF ends with '/config.js'");
 }
 
 if (new URLSearchParams(window.location.search).has('source')) {
