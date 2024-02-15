@@ -6,8 +6,8 @@ if (/config\.js\/?$/i.test(PHP_SELF)) {
 }
 
 if (new URLSearchParams(window.location.search).has('source')) {
-  // In JavaScript, we can't highlight the file as PHP does, but we can redirect to the file itself.
-  window.location.href = PHP_SELF.split('/').pop();
+  // Redirect to the source file (config.js)
+  window.location.href = 'config.js';
 }
 
 let secret = Array.from(window.crypto.getRandomValues(new Uint8Array(64)), val => val.toString(16)).join('');
@@ -20,12 +20,21 @@ if (form) {
     if (formData.has('guess')) {
       const guess = formData.get('guess');
       let message;
-      if (secret === guess) { // hash_equals is not necessary in JS as === does not suffer from timing attacks
+      if (secret === guess) {
         message = 'The flag is: ' + FLAG;
       } else {
         message = 'NICE TRY!!!';
       }
       document.body.textContent = message;
     }
+  });
+}
+
+const sourceLink = document.getElementById('sourceLink');
+if (sourceLink) {
+  sourceLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    // Redirect to the source file (config.js)
+    window.location.href = 'config.js';
   });
 }
